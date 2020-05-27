@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Config variables
+BRANCHES_TO_SKIP=(master develop)
+PREFIX_FILE=.git/hooks/branch-prefixes.sample
+
+# https://stackoverflow.com/a/10015707
+exec < /dev/tty
+
+
+function read_name {
+    branch_name=$1
+
+    # Ensure that file exists, supress the errors
+    touch ${PREFIX_FILE}
+
+    # Read the file
+    output=$(cat ${PREFIX_FILE} | grep ${branch_name} | cut -d " " -f2)
+
+    if [[ ${output} ]]; then
+        echo ${output}
+    else
+        return 1
+    fi
+}
+
+function register_prefix {
+    branch_name=$1
+    read -p 'Commit prefix: ' prefix
+    echo "${branch_name} ${prefix}" >> ${PREFIX_FILE}
+    echo ${prefix}
+}
+
+function branch_prefix {
+    branch_name=$1
+    read_name ${branch_name} || register_prefix ${branch_name}
+}
+
+function main {
+    # Get the current branch name
+    branch_name=$(git symbolic-ref --short HEAD)
+
+    # Branch prefix name is retrieved as a string between the first slash and the second hyphen
+    prefix=$(branch_prefix ${branch_name})
+    echo ${prefix}
+
+    branch_excluded=$(printf "%s\n" "${BRANCHES_TO_SKIP[@]}" | grep -c "^$branch_name$")
+    already_in_msg=$(grep -c "$prefix" $1)
+
+    # If it isn't excluded or already in commit message, prepend the prefix name to the given message
+    if [ -n "$branch_name" ] && ! [[ "$branch_excluded" -eq 1 ]] && ! [[ "$already_in_msg" -eq 1 ]]; then
+        sed -i.bak -e "1s/^/$prefix | /" "$1"
+    fi
+}
+
+main "$@"

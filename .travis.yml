@@ -6,4 +6,4 @@ before_install:
   - git clone --depth 1 https://github.com/bats-core/bats-core.git bats
 
 script:
-  - bats --pretty tests/
+  - bats tests/

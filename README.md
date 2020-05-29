@@ -18,14 +18,15 @@ The hook comes with an additional initialization script, both are installed with
 
 1. Check out the code where you want (`~/` was tested)
 ```bash
-git clone https://github.com/kqf/git-commit-message-prefix-hook.git ~/.git-commit-message-prefix-hook
+echo -e "\n# Enable git-commit-message-prefix-hook\n[ -f ~/.git-commit-message-prefix-hook/hook/init.sh ] && . ~/.git-commit-message-prefix-hook/hook/init.sh" >> ~/.bash_profile
 ```
 
 2. Add the init script to your shell
 ```bash
 echo -e "if ! which init-git-commit-message-prefix-hook > /dev/null; then\n  . ~/.git-commit-message-prefix-hook/init.sh;\nfi" >> ~/.bash_profile
 ```
-Restart your shell
+
+3. Restart your shell
 
 ## How to use
 By default, the hook excludes some branches such as `master`, so we need to create a `git` repository, new branch:
@@ -33,7 +34,7 @@ By default, the hook excludes some branches such as `master`, so we need to crea
 # Initialize the repository first
 git init
 
-# Now this will work
+# Now initialize the hook
 init-git-commit-message-prefix-hook
 
 # The branch related to the ticket

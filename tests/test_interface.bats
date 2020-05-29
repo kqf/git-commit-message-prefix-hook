@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 setup() {
-	source init.sh
+	. hook/init.sh
 
 	export workdir=$(mktemp -d)
 	cd ${workdir}

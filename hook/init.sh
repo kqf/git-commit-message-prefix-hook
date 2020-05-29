@@ -6,7 +6,7 @@ function init-git-commit-message-prefix-hook {
 		return 1
 	}
 
-	cp ${INSTALL_DIR}/hook/prepare-commit-msg .git/hooks/ && echo "Done!"
+	cp ${INSTALL_DIR}/prepare-commit-msg .git/hooks/ && echo "Done!"
 }
 
 export -f init-git-commit-message-prefix-hook

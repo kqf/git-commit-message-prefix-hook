@@ -19,6 +19,15 @@ teardown() {
 @test 'initializes hook for existing directory' {
 	git init
 	run init-git-commit-message-prefix-hook
-	echo "Status ${status} and ${output}"
 	[ "${status}" -eq 0 ]
+}
+
+@test 'fails to override the existing hook' {
+	git init
+
+	run init-git-commit-message-prefix-hook
+	[ "${status}" -eq 0 ] # now it's ok
+
+	run init-git-commit-message-prefix-hook
+	[ "${status}" -eq 1 ] # now it should fail
 }

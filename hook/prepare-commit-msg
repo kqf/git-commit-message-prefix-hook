@@ -42,7 +42,6 @@ function main {
 
     # Branch prefix name is retrieved as a string between the first slash and the second hyphen
     prefix=$(branch_prefix ${branch_name})
-    echo ${prefix}
 
     branch_excluded=$(printf "%s\n" "${BRANCHES_TO_SKIP[@]}" | grep -c "^$branch_name$")
     already_in_msg=$(grep -c "$prefix" $1)
